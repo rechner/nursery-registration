@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!-- TODO: Dynamically generate state selection dropdown menus -->
 <html lang="en">
   <head>
     <script src="bootstrap/js/jquery.js"></script>
@@ -18,6 +19,10 @@
       img.icon {
         height: 32px; width: 32px;
         margin-top: 12px;
+      }
+      
+      .fakelink:hover {
+        text-decoration : underline;
       }
     </style>
     <link href="bootstrap/css/bootstrap-responsive.css" rel="stylesheet">
@@ -79,7 +84,7 @@
               here, including help with registering, news, and events.<br><br>
               Links to <a href="#">Terms of Service</a>,
               a <a href="#">Privacy Policy</a>, and 
-              <a href="#">Tuition Rates</a> can go here too.
+              <a href="#">Tuition Rates</a> can go here too.</small>
           </div>
         </div>
         
@@ -140,19 +145,14 @@
                 <label class="control-label" for="Phone">Home Phone</label>
                 <div class="controls">
                   <input type="text" id="Phone" placeholder="Phone"
-                   class="input-medium" name="Phone"
-                   pattern="\(\d\d\d\)\ \d\d\d\-\d\d\d\d"
+                   class="input-medium" onblur="clear_phone();"
+                   pattern="\([2-9]\d\d\)\ [2-9]\d\d\-\d\d\d\d"
                    data-validation-pattern-message="Enter a valid US phone number"
-                   onKeyDown="return dFilter (event.keyCode, this, '<?php echo _("(###) ###-####"); ?>');">
-                  <label class="checkbox">
-                    <input type="checkbox" id="noHome" name="noHome"
-                      onClick="disable_homephone();"><a href="#" id="tooltip" 
-                      title="Check this box if you prefer to be contacted
-                      with your mobile number, or if you have no home phone."
-                      data-placement="right"
-                      onClick="$('#noHome').attr('checked', !$('#noHome').attr('checked'));
-                      $('#Phone').disable(); disable_homephone();">
-                       No home phone</a>
+                   onKeyDown="javascript:return dFilter (event.keyCode, this, '<?php echo _("(###) ###-####"); ?>');">
+                  <label class="checkbox" data-placement="right" title="Check this box if you prefer to be contacted
+                      with your mobile number, or if you have no home phone." >
+                    <input type="checkbox" id="noHome" name="noHome" onClick="disable_homephone();">
+                    <label class="fakelink" for="noHome"> No home phone </label>
                   </label>
                 </div>
               </div>
@@ -161,21 +161,17 @@
                 <label class="control-label" for="Mobile">Mobile Phone</label>
                 <div class="controls">
                   <input type="text" id="Mobile" placeholder="Mobile Phone"
-                   class="input-medium" name="Mobile"
-                   pattern="\(\d\d\d\)\ \d\d\d\-\d\d\d\d"
+                   class="input-medium" name="Mobile" onblur="clear_phone();"
+                   pattern="\([2-9]\d\d\)\ [2-9]\d\d\-\d\d\d\d"
                    data-validation-pattern-message="Enter a valid US phone number"
                    onKeyDown="return dFilter (event.keyCode, this, '<?php echo _("(###) ###-####"); ?>');">
-                  <label class="checkbox">
-                    <input type="checkbox" id="textAlerts" 
-                    name="textAlerts" onClick="check_mobile();">
-                    <a href="#" id="alerttool" 
-                      title="Enable text alerts to be notified when your
+                  <label class="checkbox"  title="Enable text alerts to be notified when your
                       child is dropped off or picked up, get reminders
                       when payment is due, and be notified of closings."
-                      data-placement="right"
-                      onClick="$('#textAlerts').attr('checked', !$('#textAlerts').attr('checked'));
-                      check_mobile();">
-                       Enable text alerts</a>
+                      data-placement="right">
+                    <input type="checkbox" id="textAlerts" 
+                    name="textAlerts" onClick="check_mobile();">
+                      <label class="fakelink" for="textAlerts"> Enable text alerts </label>
                   </label>
                 </div>
                 <div class="alert alert-error span7" id="mobileAlert" style="margin-top: 10px">
@@ -434,43 +430,44 @@
               </div>
 
               <div class="control-group form-inline">
-                <label class="control-label" for="Phone_2">Home Phone</label>
+                <label class="control-label" for="Phone">Home Phone</label>
                 <div class="controls">
-                  <input type="text" id="Phone_2" placeholder="Phone"
-                   class="input-medium" name="Phone_2"
-                   onKeyDown="return dFilter (event.keyCode, this, '<?php echo _("(###) ###-####"); ?>');">
-                  <label class="checkbox">
-                    <input type="checkbox" id="noHome_2" name="noHome_2"
-                     onClick="disable_homephone2();">
-                    <a href="#" id="tooltip2" 
-                      title="Check this box if you prefer to be contacted
-                      with your mobile number, or if you have no home phone."
-                      data-placement="right"
-                      onClick="$('#noHome_2').attr('checked', !$('#noHome').attr('checked'));
-                      $('#Phone_2').disable()">
-                       No home phone</a>
+                  <input type="text" id="Phone_2" placeholder="Home Phone"
+                   class="input-medium" name="Phone_2" onblur="clear_phone();"
+                   pattern="\([2-9]\d\d\)\ [2-9]\d\d\-\d\d\d\d"
+                   data-validation-pattern-message="Enter a valid US phone number"
+                   onKeyDown="javascript:return dFilter (event.keyCode, this, '<?php echo _("(###) ###-####"); ?>');">
+                  <label class="checkbox" data-placement="right" title="Check this box if you prefer to be contacted
+                      with your mobile number, or if you have no home phone." >
+                    <input type="checkbox" id="noHome_2" name="noHome_2" onClick="disable_homephone2();">
+                    <label class="fakelink" for="noHome_2"> No home phone </label>
                   </label>
                 </div>
               </div>
               
               <div class="control-group form-inline">
-                <label class="control-label" for="Mobile_2">Mobile Phone</label>
+                <label class="control-label" for="Mobile">Mobile Phone</label>
                 <div class="controls">
                   <input type="text" id="Mobile_2" placeholder="Mobile Phone"
-                   class="input-medium" name="Mobile_2"
+                   class="input-medium" name="Mobile_2" onblur="clear_phone();"
+                   pattern="\([2-9]\d\d\)\ [2-9]\d\d\-\d\d\d\d"
+                   data-validation-pattern-message="Enter a valid US phone number"
                    onKeyDown="return dFilter (event.keyCode, this, '<?php echo _("(###) ###-####"); ?>');">
-                  <label class="checkbox">
-                    <input type="checkbox" id="TextAlerts_2" name="TextAlerts_2">
-                    <a href="#" id="alerttool2" 
-                      title="Enable text alerts to be notified when your
+                  <label class="checkbox"  title="Enable text alerts to be notified when your
                       child is dropped off or picked up, get reminders
                       when payment is due, and be notified of closings."
-                      data-placement="right"
-                      onClick="$('#textAlerts_2').attr('checked', !$('#textAlerts').attr('checked'));">
-                       Enable text alerts</a>
+                      data-placement="right">
+                    <input type="checkbox" id="textAlerts_2" 
+                     name="textAlerts_2" onClick="check_mobile2();">
+                      <label class="fakelink" for="textAlerts"> Enable text alerts </label>
                   </label>
                 </div>
+                <div class="alert alert-error span7" id="mobileAlert2" style="margin-top: 10px">
+                  <button type="button" class="close" data-dismiss="alert">&times;</button>
+                  Please enter a valid mobile number to enable text alerts.
+                </div>
               </div>
+
               <hr>
               <div class="control-group">
                 <label class="control-label" for="Address1_2">Address</label>
@@ -567,7 +564,7 @@
                    onKeyDown="return dFilter (event.keyCode, this, '##### ####');" />
                   <label class="checkbox" style="padding-left: 15px">
                      <input type="checkbox" id="AddressSame" 
-                      onClick="secondary_address();" id="AddressSame"
+                      onClick="secondary_address();" name="AddressSame"
                       checked> Same as primary guardian
                   </label>
                 </div>
@@ -596,12 +593,15 @@
       $(function () { $("input,select,textarea,checkbox").not("[type=submit]").jqBootstrapValidation(); } );
   </script>
   <script>
+      $('#noHome, #textAlerts, #noHome_2, #textAlerts_2').parent().tooltip('hide')
+
       $('#tooltip').tooltip('hide');
       $('#alerttool').tooltip('hide');
       $('#tooltip2').tooltip('hide');
       $('#alerttool2').tooltip('hide');
       $(".collapse").collapse('hide');
       $('#mobileAlert').hide()
+      $('#mobileAlert2').hide()
       $('#popover').popover();
       //toggle_secondary_guardian();
       
@@ -650,10 +650,20 @@
         }
         return 0;
       }
-
+      
+      function clear_phone() {
+        if ($('#Phone').attr('value') == "() -")
+              $('#Phone').attr('value', '');
+        if ($('#Mobile').attr('value') == "() -")
+              $('#Mobile').attr('value', '');
+        if ($('#Phone_2').attr('value') == "() -")
+              $('#Phone_2').attr('value', '');
+        if ($('#Mobile_2').attr('value') == "() -")
+              $('#Mobile_2').attr('value', '');
+      }
       
       function check_mobile() {
-        var re = /^\(\d\d\d\)\ \d\d\d\-\d\d\d\d$/;
+        var re = /^\([2-9]\d\d\)\ [2-9]\d\d\-\d\d\d\d$/;
         if ($('#textAlerts').is(':checked') && 
            re.test($('#Mobile').attr('value'))) {
              $('#mobileAlert').hide()
@@ -661,6 +671,21 @@
         } else {
           $('#mobileAlert').show()
           $('#textAlerts').attr('checked', false)
+        }
+        if ((!$('#textAlerts').is(':checked')) && re.test($('#Mobile').attr('value')))
+          $('#mobileAlert').hide();
+        return 0;
+      }
+      
+      function check_mobile2() {
+        var re = /^\(\d\d\d\)\ \d\d\d\-\d\d\d\d$/;
+        if ($('#textAlerts2').is(':checked') && 
+           re.test($('#Mobile_2').attr('value'))) {
+             $('#mobileAlert2').hide()
+             return 0;
+        } else {
+          $('#mobileAlert2').show()
+          $('#textAlerts2').attr('checked', false)
         }
         return 0;
       }
