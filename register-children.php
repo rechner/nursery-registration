@@ -378,25 +378,6 @@
             
       }
       
-      var getAge = function(a) {
-        a = new Date(Date.parse(a.replace(/-/g, "/")));
-        var b = new Date, 
-          years  = b.getYear () - a.getYear (),
-          months = b.getMonth() - a.getMonth(),
-          days   = b.getDate () - a.getDate ();
-        if (b <= a) return "Invalid DOB."
-        b.getMonth() < a.getMonth() && (years --, months +  12);
-        b.getDate () < a.getDate () && (months--, days   += 31);
-        0 > months && (years--, months = 11);
-        a = [], b = function(b, c) {
-          0 < b && a.push(b + c + (1 < b ? "s" : "")) }
-        b(years , " year" );
-        b(months, " month");
-        b(days  , " day"  );
-        1 < a.length && (a[a.length - 1] = "and " + a[a.length - 1]);
-        return(!a.length ? "0 days" : "" ) +
-          a.join(2 < a.length ? ", " : " ") + " old."
-      }
       function getage(a) {
         a = new Date(Date.parse(a.replace(/-/g, "/")));
         var b = new Date, 
