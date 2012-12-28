@@ -378,13 +378,13 @@
             
       }
       
-      var getage = function(b) {
+      var getAge = function(b) {
         b = new Date(Date.parse(b.replace(/-/g, "/")));
         var a = new Date,
           years  = a.getFullYear() - b.getFullYear(),
           months = a.getMonth()    - b.getMonth(),
           days   = a.getDate()     - b.getDate();
-        if (a <= b)
+        if (a <= b || (years == 0 && months == 0 && days == 0))
           return "Invalid DOB.";
         if (0 == years && 0 == months)
           return "Only " + days + " day" + (1 < days ? "s" : "") + " old!";
