@@ -378,82 +378,25 @@
             
       }
       
-      function getAge(dateString) {
-        var now = new Date();
-        var today = new Date(now.getYear(),now.getMonth(),now.getDate());
-      
-        var yearNow = now.getYear();
-        var monthNow = now.getMonth();
-        var dateNow = now.getDate();
-      
-        var dob = new Date(dateString.substring(0,4),
-                           dateString.substring(5,7)-1,                   
-                           dateString.substring(8,11)                  
-                           );
-      
-        var yearDob = dob.getYear();
-        var monthDob = dob.getMonth();
-        var dateDob = dob.getDate();
-        var age = {};
-        var ageString = "";
-        var yearString = "";
-        var monthString = "";
-        var dayString = "";
-      
-      
-        yearAge = yearNow - yearDob;
-      
-        if (monthNow >= monthDob)
-          var monthAge = monthNow - monthDob;
-        else {
-          yearAge--;
-          var monthAge = 12 + monthNow -monthDob;
-        }
-      
-        if (dateNow >= dateDob)
-          var dateAge = dateNow - dateDob;
-        else {
-          monthAge--;
-          var dateAge = 31 + dateNow - dateDob;
-      
-          if (monthAge < 0) {
-            monthAge = 11;
-            yearAge--;
-          }
-        }
-      
-        age = {
-            years: yearAge,
-            months: monthAge,
-            days: dateAge
-            };
-      
-        if ( age.years > 1 ) yearString = " years";
-        else yearString = " year";
-        if ( age.months> 1 ) monthString = " months";
-        else monthString = " month";
-        if ( age.days > 1 ) dayString = " days";
-        else dayString = " day";
-      
-        if ( (age.years > 0) && (age.months > 0) && (age.days > 0) )
-          ageString = age.years + yearString + ", " + age.months + monthString + ", and " + age.days + dayString + " old.";
-        else if ( (age.years == 0) && (age.months == 0) && (age.days > 0) )
-          ageString = "Only " + age.days + dayString + " old!";
-        else if ( (age.years > 0) && (age.months == 0) && (age.days == 0) )
-          ageString = age.years + yearString + " old. Happy Birthday!!";
-        else if ( (age.years > 0) && (age.months > 0) && (age.days == 0) )
-          ageString = age.years + yearString + " and " + age.months + monthString + " old.";
-        else if ( (age.years == 0) && (age.months > 0) && (age.days > 0) )
-          ageString = age.months + monthString + " and " + age.days + dayString + " old.";
-        else if ( (age.years > 0) && (age.months == 0) && (age.days > 0) )
-          ageString = age.years + yearString + " and " + age.days + dayString + " old.";
-        else if ( (age.years == 0) && (age.months > 0) && (age.days == 0) )
-          ageString = age.months + monthString + " old.";
-        else ageString = "Oops! Could not calculate age!";
-      
-        return ageString;
+      var getage = function(b) {
+        b = new Date(Date.parse(b.replace(/-/g, "/")));
+        var a = new Date,
+          years  = a.getFullYear() - b.getFullYear(),
+          months = a.getMonth()    - b.getMonth(),
+          days   = a.getDate()     - b.getDate();
+        if (a <= b)
+          return "Invalid DOB.";
+        if (0 == years && 0 == months)
+          return "Only " + days + " day" + (1 < days ? "s" : "") + " old!";
+        a = [];
+        0 < years  && a.push(years  + " year"  + (1 < years  ? "s" : ""));
+        0 < months && a.push(months + " month" + (1 < months ? "s" : ""));
+        0 < days   && a.push(days   + " day"   + (1 < days   ? "s" : ""));
+        1 < a.length && (a[a.length - 1] = "and " + a[a.length - 1]);
+        a = a.join(2 < a.length ? ", " : " ") + " old." +
+          (years && 0 == months && 0 == days? " Happy birthday!!" : "");
+        return a;
       }
-      
       
       $(function() {
 
