@@ -110,7 +110,7 @@
             <hr>
             
             <ul class="nav nav-tabs" id="children">
-              <li class="active"><a href="#child1">Child 1</a></li>
+              <li class="active"><a href="#child1" id="link1">Child 1</a></li>
               <li id="addButton"><button type="button" class="btn btn-success"
                   onClick="add_child();" style="margin-left: 5px">
                   Add Child <i class=" icon-plus icon-white"></i></button></li>
@@ -118,13 +118,14 @@
              
             <div class="tab-content">
               <div class="tab-pane active" id="child1">
+                <!-- begin form -->
                 <fieldset class="form-horizontal">
                   <small>Inputs marked in red are required</small>
                   <div class="control-group">
                     <label class="control-label" for="Name">Name</label>
                     <div class="controls">
                       <input type="text" id="Name" placeholder="Name"
-                       class="span5" name="Name" required>
+                       class="span5" name="Name" onkeydown="update_tab(1);" required>
                        <span class="help-inline" style="color: red">*</span>
                     </div>
                   </div>
@@ -144,15 +145,16 @@
                     </div>
                   </div>
                   <div class="control-group">
-                    <label class="control-label" for="DOB">DOB</label>
+                    <label class="control-label" for="DOB1">DOB</label>
                     <div class="controls control-row">
-                      <input type="text" id="DOB" placeholder="YYYY-MM-DD"
-                       class="input-small" name="DOB" required
+                      <input type="text" id="DOB1" placeholder="YYYY-MM-DD"
+                       class="input-small" name="DOB1" required
                        onKeyDown="return dFilter (event.keyCode, this, '####-##-##');"
+                       onkeyup="showAge(1);"
                        pattern="^[12]\d{3}-(0?[1-9]|1[0-2])-([012]?[0-9]|3[01])$"
                        data-validation-pattern-message="Must be a valid ISO8601 date.">
                        <span class="help-inline" style="color: red">*</span>
-                       <span class="help-inline">Age: ?</span>
+                       <span class="help-inline" id="age1">Age: ?</span>
                     </div>
                   </div>
                 </fieldset>
@@ -276,6 +278,21 @@
                       <strong>No</strong>
                   </label>
                 </fieldset>
+                <fieldset class="form-inline">
+                  <legend>Agreement</legend>
+                  Please read the following carefully<br><br>
+                  <label class="checkbox offset1">
+                    <input type="checkbox" name="TripRelease" id="TripRelease" required>
+                      <strong><span class="label label-important">Important</span>
+                      <span>By checking this box, I understand that the 
+                        Department of Human Resources does not inspect 
+                        activities away from the child care facility 
+                        (home or center). The licensee of the child
+                        care facility assumes full responsibility for such 
+                        activities.</span></strong>
+                  </label>
+                </fieldset>
+                <!-- end form -->
               </div>
             </div>
             
@@ -330,6 +347,12 @@
         $('.tab-content').append('<div class="tab-pane" id="child'+
           record_count+'">new....'+record_count+'</div>');
 
+        //switch to the tab
+        $('#children a[href="#child'+record_count+'"]').tab('show');
+        
+        //return to the top of the page
+        window.scrollTo(0,0);
+        
         return 0;
       }
 
@@ -338,14 +361,99 @@
           e.preventDefault();
           $(this).tab('show');
         });
+        
+        
+      function update_tab(tabnumber) {
+        var name = $('#Name').attr('value');
+        var surname = $('#Lastname').attr('value');
+        
+        if ((name != "") || (surname != ""))
+          document.getElementById('link'+tabnumber).innerHTML = name //+ ' ' + surname;
+      }
       
-/*
-      $('button').click(function (e) {
-        e.preventDefault();
-        $('.nav-tabs').append('<li><a href="#new_tab">New Tab</a></li>');
-        $('.tab-content').append('<div class="tab-pane" id="new_tab">new...</div>');
-      })
-*/
+      function showAge(ind) {
+        
+          document.getElementById('age1').innerHTML = "Age: "+
+            getAge($('#DOB'+ind).attr('value'));
+            
+      }
+      
+      function getAge(dateString) {
+        var now = new Date();
+        var today = new Date(now.getYear(),now.getMonth(),now.getDate());
+      
+        var yearNow = now.getYear();
+        var monthNow = now.getMonth();
+        var dateNow = now.getDate();
+      
+        var dob = new Date(dateString.substring(0,4),
+                           dateString.substring(5,7)-1,                   
+                           dateString.substring(8,11)                  
+                           );
+      
+        var yearDob = dob.getYear();
+        var monthDob = dob.getMonth();
+        var dateDob = dob.getDate();
+        var age = {};
+        var ageString = "";
+        var yearString = "";
+        var monthString = "";
+        var dayString = "";
+      
+      
+        yearAge = yearNow - yearDob;
+      
+        if (monthNow >= monthDob)
+          var monthAge = monthNow - monthDob;
+        else {
+          yearAge--;
+          var monthAge = 12 + monthNow -monthDob;
+        }
+      
+        if (dateNow >= dateDob)
+          var dateAge = dateNow - dateDob;
+        else {
+          monthAge--;
+          var dateAge = 31 + dateNow - dateDob;
+      
+          if (monthAge < 0) {
+            monthAge = 11;
+            yearAge--;
+          }
+        }
+      
+        age = {
+            years: yearAge,
+            months: monthAge,
+            days: dateAge
+            };
+      
+        if ( age.years > 1 ) yearString = " years";
+        else yearString = " year";
+        if ( age.months> 1 ) monthString = " months";
+        else monthString = " month";
+        if ( age.days > 1 ) dayString = " days";
+        else dayString = " day";
+      
+        if ( (age.years > 0) && (age.months > 0) && (age.days > 0) )
+          ageString = age.years + yearString + ", " + age.months + monthString + ", and " + age.days + dayString + " old.";
+        else if ( (age.years == 0) && (age.months == 0) && (age.days > 0) )
+          ageString = "Only " + age.days + dayString + " old!";
+        else if ( (age.years > 0) && (age.months == 0) && (age.days == 0) )
+          ageString = age.years + yearString + " old. Happy Birthday!!";
+        else if ( (age.years > 0) && (age.months > 0) && (age.days == 0) )
+          ageString = age.years + yearString + " and " + age.months + monthString + " old.";
+        else if ( (age.years == 0) && (age.months > 0) && (age.days > 0) )
+          ageString = age.months + monthString + " and " + age.days + dayString + " old.";
+        else if ( (age.years > 0) && (age.months == 0) && (age.days > 0) )
+          ageString = age.years + yearString + " and " + age.days + dayString + " old.";
+        else if ( (age.years == 0) && (age.months > 0) && (age.days == 0) )
+          ageString = age.months + monthString + " old.";
+        else ageString = "Oops! Could not calculate age!";
+      
+        return ageString;
+      }
+      
       
       $(function() {
 
