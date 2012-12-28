@@ -380,23 +380,25 @@
       
       var getAge = function(a) {
         a = new Date(Date.parse(a.replace(/-/g, "/")));
-        var b = new Date,
-          years  = b.getYear()  - a.getYear(),
+        var b    = new  Date                  ,
+          years  = b.getYear () - a.getYear (),
           months = b.getMonth() - a.getMonth(),
-          days   = b.getDate()  - a.getDate();
-        if (b <= a || !years && !months && !days)
-          return "Invalid DOB.";
-        if (!years && !months)
-          return "Only " + days + " day" + (1 < days ? "s" : "") + " old!";
-        b = [];
-        a = function(a, c) {
-          0 < a && b.push(a + c + (1 < a ? "s" : ""))}
-        a(years , " year" );
-        a(months, " month");
-        a(days  , " day"  );
-        1 < b.length && (b[b.length - 1] = "and " + b[b.length - 1]);
-        return b.join(2 < b.length ? ", " : " ") + " old." +
-          (years && !months && !days ? " Happy birthday!!" : "")
+          days   = b.getDate () - a.getDate ();
+        if (b.getMonth() < a.getMonth()) {
+          years --; months +  12; }
+        if (b.getDate () < a.getDate ()) {
+          months--; days   += 31; }
+        if (months       < 0           ) {
+          years --; months  = 11; }
+        a = [], b = function(b, c) {
+          b > 0 && a.push(b + c + (b > 1 ? "s" : "")) }
+        b(years , " year" );
+        b(months, " month");
+        b(days  , " day"  );
+        a.length > 1 && (a[a.length - 1]  =
+          "and " +       a[a.length - 1]  ) ;
+        return (!a.length ? "0 days" : "" ) +
+          a.join(a.length > 2 ? ", " : " ") + " old." ;
       }
       
       $(function() {
