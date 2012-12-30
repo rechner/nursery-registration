@@ -239,8 +239,8 @@
         }
       }
       
-      $("#employer_1, #employer_2").keypress(function(evt){
-        evt.which === 13 && $("a", evt.target.parentNode).click()
+      $("#employer_1, #employer_2").keypress(function(e){
+        e.which === 13 && $("a", evt.target.parentNode).click()
       })
           
       $(function() {
