@@ -239,11 +239,9 @@
         }
       }
       
-      $("#employer_1").keyup(function(event){
-          if(event.keyCode == 13){
-              $("#id_of_button").click();
-          }
-      });
+      $("#employer_1, #employer_2").keypress(function(evt){
+        evt.which === 13 && $("a", evt.target.parentNode).click()
+      })
           
       $(function() {
 
